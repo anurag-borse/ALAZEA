@@ -1,4 +1,7 @@
-﻿@{
+﻿@model ALAZEA.Models.ViewModels.BaseViewModel
+
+
+@{
     Layout = null;
 }
 
@@ -99,8 +102,8 @@
                                         </ul>
                                     </li>
                                     <li><a href="@Url.Action("Shop","Home")">Shop</a></li>
-                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="@Url.Action("Portfolio","Home")">Portfolio</a></li>
+                                    <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
                                 </ul>
 
                                 <!-- Search Icon -->

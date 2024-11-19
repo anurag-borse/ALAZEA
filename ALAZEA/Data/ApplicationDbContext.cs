@@ -55,6 +55,16 @@ namespace ALAZEA.Data
                 .WithMany(p => p.OrderPlants)
                 .HasForeignKey(op => op.PlantID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Admin>().HasData(
+                new Admin
+                {
+                    AdminID = new Guid("81b20d3b-eed0-4d41-ae86-b3dcb6cf32ed"),
+                    Username = "admin@gmail.com",
+                    Password = "1234" // Always encrypt passwords!
+                }
+            );
         }
 
     }

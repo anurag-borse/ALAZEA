@@ -1,10 +1,10 @@
 using ALAZEA.Data;
 using ALAZEA.Models;
 using ALAZEA.Models.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using System.Linq;
 
 namespace ALAZEA.Controllers
 {
@@ -17,48 +17,46 @@ namespace ALAZEA.Controllers
         {
             _logger = logger;
             _context = context;
-
         }
 
-        public IActionResult Index()
+        // Helper method to get logged-in user
+        private User GetLoggedInUser()
         {
             var userId = HttpContext.Session.GetString("UserID");
-            User loggedInUser = null;
-
             if (userId != null)
             {
-                loggedInUser = _context.User.FirstOrDefault(u => u.UserID.ToString() == userId);
+                return _context.User.FirstOrDefault(u => u.UserID.ToString() == userId);
             }
+            return null;
+        }
 
+        // Simplified actions
+        public IActionResult Index()
+        {
             var model = new BaseViewModel
             {
-                User = loggedInUser
+                User = GetLoggedInUser()
             };
-
             return View(model);
         }
 
-
         public IActionResult About()
         {
-            return View();
+            var model = new BaseViewModel
+            {
+                User = GetLoggedInUser()
+            };
+            return View(model);
         }
 
         public IActionResult Shop()
         {
-            var userId = HttpContext.Session.GetString("UserID");
-            User user = null;
-
-            if (userId != null)
-            {
-                user = _context.User.FirstOrDefault(u => u.UserID.ToString() == userId);
-            }
-
+            var user = GetLoggedInUser();
             var products = new List<Plant>
-    {
-        new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
-        new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
-    };
+            {
+                new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
+                new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
+            };
 
             var model = new ShopViewModel
             {
@@ -69,7 +67,23 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
+        public IActionResult Portfolio()
+        {
+            var model = new BaseViewModel
+            {
+                User = GetLoggedInUser()
+            };
+            return View(model);
+        }
 
+        public IActionResult Contact()
+        {
+            var model = new BaseViewModel
+            {
+                User = GetLoggedInUser()
+            };
+            return View(model);
+        }
 
         public IActionResult Privacy()
         {

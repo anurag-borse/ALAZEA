@@ -1,4 +1,4 @@
-﻿@model ShopViewModel
+﻿@model ALAZEA.Models.ViewModels.ShopViewModel
 
 @{
     Layout = null;
@@ -65,15 +65,18 @@
                             <!-- Navbar Start -->
                             <div class="classynav">
                                 <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="about.html">About</a></li>
+                                    <li><a href="@Url.Action("Index", "Home")">Home</a></li>
+                                    <li><a href="@Url.Action("About", "Home")">About</a></li>
+
+
                                     <li>
                                         <a href="#">Pages</a>
                                         <ul class="dropdown">
                                             <li><a href="index.html">Home</a></li>
                                             <li><a href="about.html">About</a></li>
                                             <li>
-                                                <a href="shop.html">Shop</a>
+                                                <a href="@Url.Action("Shop","Home")">Shop</a>
+
                                                 <ul class="dropdown">
                                                     <li><a href="shop.html">Shop</a></li>
                                                     <li><a href="shop-details.html">Shop Details</a></li>
@@ -98,9 +101,9 @@
                                             <li><a href="contact.html">Contact</a></li>
                                         </ul>
                                     </li>
-                                    <li><a href="shop.html">Shop</a></li>
-                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
+                                    <li><a href="@Url.Action("Shop","Home")">Shop</a></li>
+                                    <li><a href="@Url.Action("Portfolio","Home")">Portfolio</a></li>
+                                    <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
                                 </ul>
 
                                 <!-- Search Icon -->
@@ -346,14 +349,10 @@
                                 <div class="col-12 col-sm-6 col-lg-4">
                                     <div class="single-product-area mb-50">
                                         <!-- Product Image -->
-                                        <div class="prod-img">
-                                            <a href="shop-details.html">
-                                                <img src="@Url.Content(product.ImagePath)" alt="Product Image" >
-                                            </a>
-                                            <!-- Product Tag -->
-                                            <div class="product-tag">
-                                                <a href="#">Hot</a>
-                                            </div>
+                                        <div class="product-img">
+                                            <img src="@Url.Content(product.ImagePath)" alt="Product Image">
+
+
                                             <div class="product-meta d-flex">
                                                 <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
                                                 <a href="cart.html" class="add-to-cart-btn">Add to cart</a>

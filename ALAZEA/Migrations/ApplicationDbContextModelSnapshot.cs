@@ -41,6 +41,14 @@ namespace ALAZEA.Migrations
                     b.HasKey("AdminID");
 
                     b.ToTable("Admin");
+
+                    b.HasData(
+                        new
+                        {
+                            AdminID = new Guid("81b20d3b-eed0-4d41-ae86-b3dcb6cf32ed"),
+                            Password = "1234",
+                            Username = "admin@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("ALAZEA.Models.Order", b =>
@@ -109,6 +117,10 @@ namespace ALAZEA.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
