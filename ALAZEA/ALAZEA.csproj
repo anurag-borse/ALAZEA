@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\alazea_template\" />
+    <Folder Include="Uploads\" />
   </ItemGroup>
 
 </Project>

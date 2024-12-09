@@ -54,5 +54,49 @@ namespace ALAZEA.Controllers
 
             return View();
         }
+
+
+        [HttpGet]
+        public IActionResult Plants()
+        {
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPlant(Plant plant, IFormFile plantImage)
+        {
+            if (ModelState.IsValid)
+            {
+                
+                if (plantImage != null)
+                {
+                    var file = Request.Form.Files[0];
+                    if (file.Length > 0)
+                    {
+                        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                        var filePath = Path.Combine("Uploads", uniqueFileName);
+
+
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        plant.ImagePath = filePath; 
+                    }
+                }
+
+                _context.Add(plant);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Plants)); 
+            }
+
+            return View(plant); 
+        }
+
+
+
+
     }
 }

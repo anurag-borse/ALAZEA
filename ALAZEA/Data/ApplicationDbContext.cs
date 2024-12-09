@@ -1,4 +1,5 @@
 ﻿using ALAZEA.Models;
+using ALAZEA.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALAZEA.Data
@@ -65,6 +66,13 @@ namespace ALAZEA.Data
                     Password = "1234" // Always encrypt passwords!
                 }
             );
+
+            // to Handle the Enum
+            modelBuilder.Entity<Plant>().Property(p => p.Category)
+               .HasConversion(
+                   v => v.ToString(),
+                   v => (PlantCategory)Enum.Parse(typeof(PlantCategory), v));
+
         }
 
     }
