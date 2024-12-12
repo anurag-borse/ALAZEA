@@ -1,7 +1,10 @@
 ﻿using ALAZEA.Data;
 using ALAZEA.Models;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
+
 
 namespace ALAZEA.Controllers
 {
@@ -63,40 +66,158 @@ namespace ALAZEA.Controllers
             return View();
         }
 
+        public JsonResult GetAllPlants()
+        {
+            try
+            {
+                var plants = _context.Plant.ToList();
+                var result = plants.Select(p => new
+                {
+                    PlantID = p.PlantID,
+                    Name = p.Name,
+                    Category = p.Category.ToString(),
+                    Description = p.Description,
+                    Price = p.Price,
+                    Availability = p.Availability ? "In Stock" : "Out of Stock",
+                    ImagePath = string.IsNullOrEmpty(p.ImagePath) ? null : p.ImagePath.Replace("\\", "/") // Handle null cases
+                });
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
+
+
+
         [HttpPost]
         public async Task<IActionResult> AddPlant(Plant plant, IFormFile plantImage)
         {
             if (ModelState.IsValid)
             {
-                
+
                 if (plantImage != null)
                 {
-                    var file = Request.Form.Files[0];
-                    if (file.Length > 0)
+
+                    if (plantImage.Length > 0)
                     {
-                        var uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-                        var filePath = Path.Combine("Uploads", uniqueFileName);
 
 
-                        using (var stream = System.IO.File.Create(filePath))
+                        var file = plantImage;
+                        var fileName = Guid.NewGuid().ToString() + file.FileName;
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", fileName);
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
                         {
-                            await file.CopyToAsync(stream);
+                            file.CopyTo(fileStream);
                         }
+                        plant.ImagePath = Path.Combine("/Uploads", fileName).Replace("\\", "/");
 
-                        plant.ImagePath = filePath; 
                     }
                 }
 
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Plants)); 
+                return RedirectToAction(nameof(Plants));
             }
 
-            return View(plant); 
+            return View(plant);
+        }
+
+        public JsonResult GetPlantById(Guid id)
+        {
+            try
+            {
+                var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
+
+                if (plant == null)
+                {
+                    return Json(new { error = "Plant not found" });
+                }
+
+                var result = new
+                {
+                    PlantID = plant.PlantID,
+                    Name = plant.Name,
+                    Category = plant.Category.ToString(),
+                    Description = plant.Description,
+                    Price = plant.Price,
+                    Availability = plant.Availability,
+                    Tags = plant.Tags,
+                    ImagePath = plant.ImagePath
+                };
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
 
+        [HttpPost]
+        public JsonResult UpdatePlant(Plant model, IFormFile plantImage)
+        {
+            try
+            {
+                var plant = _context.Plant.FirstOrDefault(p => p.PlantID == model.PlantID);
 
+                if (plant == null)
+                {
+                    return Json(new { error = "Plant not found" });
+                }
+
+                plant.Name = model.Name;
+                plant.Category = model.Category;
+                plant.Description = model.Description;
+                plant.Price = model.Price;
+                plant.Availability = model.Availability;
+                plant.Tags = model.Tags;
+
+                if (plantImage != null && plantImage.Length > 0)
+                {
+                    // If the plant already has an image, delete the old one
+                    if (!string.IsNullOrEmpty(plant.ImagePath))
+                    {
+                        var oldImagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", plant.ImagePath.TrimStart('/'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            try
+                            {
+                                System.IO.File.Delete(oldImagePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                // Log the exception or handle it appropriately
+                                return Json(new { error = "Failed to delete old image: " + ex.Message });
+                            }
+                        }
+                    }
+
+                    // Save the new image
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(plantImage.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        plantImage.CopyTo(fileStream);
+                    }
+                    plant.ImagePath = Path.Combine("/Uploads", fileName).Replace("\\", "/");
+                }
+                else
+                {
+                    plant.ImagePath = plant.ImagePath;
+                }
+
+                _context.SaveChanges();
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+        }
 
     }
 }

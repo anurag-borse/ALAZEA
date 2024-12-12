@@ -67,6 +67,43 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
+
+        public IActionResult ShopDetails()
+        {
+            //var user = GetLoggedInUser();
+        
+
+            //var model = new ShopViewModel
+            //{
+            //    User = user,
+                
+            //};
+
+          //  return View(model);
+            return View();
+        }
+
+        public IActionResult Blog()
+        {
+            return View();
+        }
+        public IActionResult BlogDetail()
+        {
+            return View();
+        }
+        public IActionResult Cart()
+        {
+            return View();
+        }
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        public IActionResult PortfolioDetail()
+        {
+            return View();
+        }
         public IActionResult Portfolio()
         {
             var model = new BaseViewModel

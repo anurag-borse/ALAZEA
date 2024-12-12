@@ -17,7 +17,11 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\alazea_template\" />
-    <Folder Include="Uploads\" />
+    <Folder Include="wwwroot\Uploads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Uploads\de55fb3c-3ae8-436c-9cb8-c0ad25696691.png" />
   </ItemGroup>
 
 </Project>
