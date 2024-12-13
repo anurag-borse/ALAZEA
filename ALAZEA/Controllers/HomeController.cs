@@ -19,7 +19,6 @@ namespace ALAZEA.Controllers
             _context = context;
         }
 
-        // Helper method to get logged-in user
         private User GetLoggedInUser()
         {
             var userId = HttpContext.Session.GetString("UserID");
@@ -52,11 +51,7 @@ namespace ALAZEA.Controllers
         public IActionResult Shop()
         {
             var user = GetLoggedInUser();
-            var products = new List<Plant>
-            {
-                new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
-                new Plant { Name = "Cactus Flower", ImagePath = "~/alazea_template/img/bg-img/40.png", Price = 10.99m },
-            };
+            var products = _context.Plant.ToList();
 
             var model = new ShopViewModel
             {
@@ -67,20 +62,15 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
-
-        public IActionResult ShopDetails()
+        public IActionResult ShopDetails(Guid id)
         {
-            //var user = GetLoggedInUser();
-        
+            var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
+            if (plant == null)
+            {
+                return NotFound(); 
+            }
 
-            //var model = new ShopViewModel
-            //{
-            //    User = user,
-                
-            //};
-
-          //  return View(model);
-            return View();
+            return View(plant);
         }
 
         public IActionResult Blog()
@@ -122,15 +112,7 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+     
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

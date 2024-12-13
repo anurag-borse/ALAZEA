@@ -329,6 +329,7 @@
                                                 <th>Price</th>
                                                 <th>Availability</th>
                                                 <th>Image</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody id="plantsData">
@@ -341,6 +342,7 @@
                                                 <th>Price</th>
                                                 <th>Availability</th>
                                                 <th>Image</th>
+                                                <th>Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -449,7 +451,7 @@
                                             <div class="modal-body">
                                                 <div class="basic-form">
                                                     <form asp-action="UpdatePlant" asp-controller="Admin" method="post" enctype="multipart/form-data">
-                                                       
+
                                                         <input type="hidden" id="plantID" name="PlantID" asp-for="PlantID" />
 
                                                         <div class="form-row">
@@ -610,7 +612,10 @@
 
     <!-- Include Bootstrap JS after jQuery -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    
+
+    <!--Sweet Alert-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script>
         $(document).ready(function () {
             // Define the loadPlants function so it's accessible from anywhere in this scope
@@ -632,6 +637,9 @@
                                 tableBody += '<td>Rs.' + (plant.price ? parseFloat(plant.price).toFixed(2) : '0.00') + '</td>';
                                 tableBody += '<td>' + (plant.availability || 'Unknown') + '</td>';
                                 tableBody += `<td><img src="${plant.imagePath || ''}" alt="${plant.name || 'Image'}" width="50"></td>`;
+                                tableBody += `<td>
+                                                <button type="button" class="btn btn-danger delete-plant" data-id="${plant.plantID}">Delete</button>
+                                              </td>`;
                                 tableBody += '</tr>';
                             });
                             $('#plantsData').html(tableBody);
@@ -710,6 +718,48 @@
                     }
                 });
             });
+
+
+
+
+            // delete plant
+                    $(document).on('click', '.delete-plant', function () {
+            var plantID = $(this).data('id');
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Admin/DeletePlant',  // Ensure this endpoint exists on server
+                        method: 'POST',
+                        data: { id: plantID },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "The plant has been deleted.",
+                                    icon: "success"
+                                });
+                                loadPlants();  // Refresh list after deletion
+                            } else {
+                                Swal.fire('Failed!', 'Could not delete the plant.', 'error');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire('Failed!', 'Error deleting the plant: ' + error, 'error');
+                        }
+                    });
+                }
+            });
+        });
+
         });
     </script>
 </body>

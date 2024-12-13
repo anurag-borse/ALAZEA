@@ -142,7 +142,7 @@
                 <div class="col-12">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                            <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> Home</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Shop</li>
                         </ol>
                     </nav>
@@ -344,27 +344,21 @@
                         <div class="row">
 
                             <!-- Single Product Area -->
-                            @foreach (var product in Model.Plants)
+                            @foreach (var plant in Model.Plants)
                             {
                                 <div class="col-12 col-sm-6 col-lg-4">
                                     <div class="single-product-area mb-50">
                                         <!-- Product Image -->
                                         <div class="product-img">
-                                            <img src="@Url.Content(product.ImagePath)" alt="Product Image">
-
-
-                                            <div class="product-meta d-flex">
-                                                <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
-                                                <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
-                                                <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
-                                            </div>
+                                            <img src="@Url.Content(plant.ImagePath)" alt="Product Image">
                                         </div>
+
                                         <!-- Product Info -->
                                         <div class="product-info mt-15 text-center">
-                                            <a href="shop-details.html">
-                                                <p>@product.Name</p> <!-- Display the product name -->
+                                            <a href="@Url.Action("ShopDetails", "Home", new { id = plant.PlantID })">
+                                                <p>@plant.Name</p>
                                             </a>
-                                            <h6>@product.Price.ToString("C")</h6>  <!-- Format the price as currency -->
+                                            <h6>@plant.Price.ToString("C")</h6>
                                         </div>
                                     </div>
                                 </div>

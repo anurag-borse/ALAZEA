@@ -21,13 +21,11 @@ namespace ALAZEA.Controllers
             _logger = logger;
         }
 
-
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
-
 
         [HttpPost]
         public IActionResult Login(Admin admin)
@@ -57,7 +55,6 @@ namespace ALAZEA.Controllers
 
             return View();
         }
-
 
         [HttpGet]
         public IActionResult Plants()
@@ -89,8 +86,6 @@ namespace ALAZEA.Controllers
                 return Json(new { error = ex.Message });
             }
         }
-
-
 
         [HttpPost]
         public async Task<IActionResult> AddPlant(Plant plant, IFormFile plantImage)
@@ -156,7 +151,6 @@ namespace ALAZEA.Controllers
             }
         }
 
-
         [HttpPost]
         public JsonResult UpdatePlant(Plant model, IFormFile plantImage)
         {
@@ -219,5 +213,44 @@ namespace ALAZEA.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult DeletePlant(Guid id)
+        {
+            try
+            {
+                var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
+                if (plant == null)
+                {
+                    return Json(new { success = false, error = "Plant not found." });
+                }
+
+
+                if (!string.IsNullOrEmpty(plant.ImagePath))
+                {
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", plant.ImagePath.TrimStart('/'));
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(imagePath);
+                        }
+                        catch (Exception ex)
+                        {
+                            return Json(new { success = false, error = "Failed to delete the image file: " + ex.Message });
+                        }
+                    }
+                }
+
+
+                _context.Plant.Remove(plant);
+                _context.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
     }
 }
