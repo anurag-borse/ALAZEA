@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using ALAZEA.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ALAZEA.Controllers
 {
@@ -93,5 +94,39 @@ namespace ALAZEA.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+
+
+        // Admin Login Form
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AdminLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult AdminLogin(Admin admin)
+        {
+            var adminInDb = _context.Admin.FirstOrDefault(u => u.Username == admin.Username);
+            if (adminInDb == null)
+            {
+                TempData["Error"] = "Invalid login credentials.";
+                return RedirectToAction(nameof(AdminLogin));
+            }
+
+            if (adminInDb.Password == admin.Password)
+            {
+                HttpContext.Session.SetString("AdminID", adminInDb.AdminID.ToString());
+                TempData["Success"] = "Login successful!";
+                return RedirectToAction("Dashboard","Admin" );
+            }
+
+            TempData["Error"] = "Invalid login credentials.";
+            return RedirectToAction(nameof(AdminLogin));
+
+        }
+
     }
-}
+}   

@@ -30,7 +30,7 @@
                             <!-- If user is logged in -->
                             @if (Model.User != null)
                             {
-                                <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span>@Model.Name</span></a>
+                                <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span>@Model.User.Name</span></a>
 
                                 <!-- Additional Dropdown for Logged-in User -->
                                 <div class="language-dropdown">
