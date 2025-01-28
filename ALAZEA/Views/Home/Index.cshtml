@@ -65,7 +65,10 @@
                             </div>
 
                             <!-- Navbar Start -->
-                            <div class="classynav">
+
+                            @Html.Partial("_Navbar")
+
+                           @*  <div class="classynav">
                                 <ul>
                                     <li><a href="@Url.Action("Index", "Home")">Home</a></li>
                                     <li><a href="@Url.Action("About", "Home")">About</a></li>
@@ -114,7 +117,7 @@
                                     <i class="fa fa-search" aria-hidden="true"></i>
                                 </div>
 
-                            </div>
+                            </div> *@
                             <!-- Navbar End -->
                         </div>
                     </nav>

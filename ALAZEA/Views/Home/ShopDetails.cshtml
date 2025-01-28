@@ -1,4 +1,6 @@
-﻿@model Plant
+﻿@* @model Plant
+ *@
+ @model ShopDetailsViewModel
 
 @{
     Layout = null;
@@ -101,52 +103,7 @@
                             </div>
 
                             <!-- Navbar Start -->
-                            <div class="classynav">
-                                <ul>
-                                    <li><a href="index.html">Home</a></li>
-                                    <li><a href="about.html">About</a></li>
-                                    <li>
-                                        <a href="#">Pages</a>
-                                        <ul class="dropdown">
-                                            <li><a href="index.html">Home</a></li>
-                                            <li><a href="about.html">About</a></li>
-                                            <li>
-                                                <a href="shop.html">Shop</a>
-                                                <ul class="dropdown">
-                                                    <li><a href="shop.html">Shop</a></li>
-                                                    <li><a href="shop-details.html">Shop Details</a></li>
-                                                    <li><a href="cart.html">Shopping Cart</a></li>
-                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a href="portfolio.html">Portfolio</a>
-                                                <ul class="dropdown">
-                                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                                    <li><a href="single-portfolio.html">Portfolio Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li>
-                                                <a href="blog.html">Blog</a>
-                                                <ul class="dropdown">
-                                                    <li><a href="blog.html">Blog</a></li>
-                                                    <li><a href="single-post.html">Blog Details</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="contact.html">Contact</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="shop.html">Shop</a></li>
-                                    <li><a href="portfolio.html">Portfolio</a></li>
-                                    <li><a href="contact.html">Contact</a></li>
-                                </ul>
-
-                                <!-- Search Icon -->
-                                <div id="searchIcon">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                                </div>
-
-                            </div>
+                            @Html.Partial("_Navbar");
                             <!-- Navbar End -->
                         </div>
                     </nav>
@@ -198,40 +155,45 @@
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <a class="product-img" href="~/alazea_template/img/bg-img/49.jpg" title="Product Image">
-                                            <img class="d-block w-100" src="~/alazea_template/img/bg-img/49.jpg" alt="1">
+                                        <a class="product-img" href="@Url.Content(Model.SelectedPlant.ImagePath)" title="Product Image">
+                                            <img class="d-block w-100" src="@Url.Content(Model.SelectedPlant.ImagePath)" alt="1">
                                         </a>
                                     </div>
                                     <div class="carousel-item">
-                                        <a class="product-img" href="~/alazea_template/img/bg-img/49.jpg" title="Product Image">
-                                            <img class="d-block w-100" src="~/alazea_template/img/bg-img/49.jpg" alt="1">
+                                        <a class="product-img" href="@Url.Content(Model.SelectedPlant.ImagePath)" title="Product Image">
+                                            <img class="d-block w-100" src="@Url.Content(Model.SelectedPlant.ImagePath)" alt="1">
                                         </a>
                                     </div>
                                     <div class="carousel-item">
-                                        <a class="product-img" href="~/alazea_template/img/bg-img/49.jpg" title="Product Image">
-                                            <img class="d-block w-100" src="~/alazea_template/img/bg-img/49.jpg" alt="1">
+                                        <a class="product-img" href="@Url.Content(Model.SelectedPlant.ImagePath)" title="Product Image">
+                                            <img class="d-block w-100" src="@Url.Content(Model.SelectedPlant.ImagePath)" alt="1">
                                         </a>
                                     </div>
                                 </div>
                                 <ol class="carousel-indicators">
 
-                                    <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url(@Url.Content("~/alazea_template/img/bg-img/49.jpg"));">
+                                    <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url('@Url.Content(Model.SelectedPlant.ImagePath)');">
                                     </li>
-                                    <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url(@Url.Content("~/alazea_template/img/bg-img/49.jpg"));">
+                                    <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url('@Url.Content(Model.SelectedPlant.ImagePath)');">
                                     </li>
-                                    <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url(@Url.Content("~/alazea_template/img/bg-img/49.jpg"));">
+                                    <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url('@Url.Content(Model.SelectedPlant.ImagePath)');">
                                     </li>
                                 </ol>
                             </div>
                         </div>
                     </div>
 
+
                     <div class="col-12 col-md-6">
                         <div class="single_product_desc">
-                            <h4 class="title">Recuerdos Plant</h4>
-                            <h4 class="price">$9.99</h4>
+                            <h4 class="title">@Model.SelectedPlant.Name</h4>
+                             <h4 class="price">₹@Model.SelectedPlant.Price</h4>
+                            @*   <h4 class="price">₹@String.Format("{0:N0}", Model.SelectedPlant.Price)</h4> *@  
+
                             <div class="short_overview">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus pellem malesuada in nibh selama euismod. Curabitur a rhoncus dui. Nunc lobortis cursus magna utrum faucibus. Vivamus justo nibh, pharetra non risus accumsan, tincidunt suscipit leo.</p>
+
+                                <p> @Model.SelectedPlant.Description</p>
+
                             </div>
 
                             <div class="cart--area d-flex flex-wrap align-items-center">
@@ -252,9 +214,9 @@
                             </div>
 
                             <div class="products--meta">
-                                <p><span>SKU:</span> <span>CT201807</span></p>
-                                <p><span>Category:</span> <span>Outdoor Plants</span></p>
-                                <p><span>Tags:</span> <span>plants, green, cactus </span></p>
+                                <p><span>SKU:</span> <span>@Model.SelectedPlant.PlantID</span></p>
+                                <p><span>Category:</span> <span>@Model.SelectedPlant.Category</span></p>
+                                <p><span>Tags:</span> <span>@Model.SelectedPlant.Tags</span></p>
                                 <p>
                                     <span>Share on:</span>
                                     <span>
@@ -436,7 +398,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            @*   <div class="row">
 
                 <!-- Single Product Area -->
                 <div class="col-12 col-sm-6 col-lg-3">
@@ -534,7 +496,74 @@
                     </div>
                 </div>
 
+            </div> *@
+
+
+
+
+
+
+
+
+
+
+
+            <!-- Related Products -->
+            <div class="row">
+                @foreach (var product in Model.RelatedProducts)
+                {
+                    <div class="col-12 col-sm-6 col-lg-3">
+                        <div class="single-product-area mb-100">
+                            <div class="product-img">
+                                <a href="shop-details.html"><img src="@Url.Content(product.ImagePath)" alt="@product.Name"></a>
+
+                                @if (!string.IsNullOrEmpty(product.Tags))
+                                {
+                                    <div class="product-tag @((product.Tags.ToLower() == "sale") ? "sale-tag" : "")">
+                                        <a href="#">@product.Tags</a>
+                                    </div>
+                                }
+
+                                <div class="product-meta d-flex">
+                                    <a href="#" class="wishlist-btn"><i class="icon_heart_alt"></i></a>
+                                    <a href="cart.html" class="add-to-cart-btn">Add to cart</a>
+                                    <a href="#" class="compare-btn"><i class="arrow_left-right_alt"></i></a>
+                                </div>
+                            </div>
+                            <div class="product-info mt-15 text-center">
+                                <a href="shop-details.html">
+                                    <p>@product.Name</p>
+                                </a>
+                                <h6>@product.Price.ToString("C")</h6>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
     </div>
     <!-- ##### Related Product Area End ##### -->
