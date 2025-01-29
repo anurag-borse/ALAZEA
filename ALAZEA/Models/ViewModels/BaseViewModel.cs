@@ -2,7 +2,7 @@
 {
     public class BaseViewModel
     {
-        public User User { get; set; }
+        public User? User { get; set; }
 
     }
 }

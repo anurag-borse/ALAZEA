@@ -62,34 +62,29 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
-        //public IActionResult ShopDetails(Guid id)
-        //{
-
-        //    var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
-        //    if (plant == null)
-        //    {
-        //        return NotFound(); 
-        //    }
-
-        //    return View(plant);
-        //}
 
 
         public IActionResult ShopDetails(Guid id)
         {
-                var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
+            var plant = _context.Plant.FirstOrDefault(p => p.PlantID == id);
             if (plant == null)
             {
                 return NotFound();
             }
 
-            // Example: Fetch related products (you can customize this query)
-            var relatedProducts = _context.Plant.ToList();
+            // Fetch the latest 4 plants excluding the selected one
+            var relatedProducts = _context.Plant
+                .Where(p => p.PlantID != id) 
+                .OrderByDescending(p => p.PlantID)
+                .Take(4)
+                .ToList();
 
             var viewModel = new ShopDetailsViewModel
             {
                 SelectedPlant = plant,
-                RelatedProducts = relatedProducts
+                RelatedProducts = relatedProducts,
+                User = GetLoggedInUser()
+
             };
 
             return View(viewModel);
@@ -134,7 +129,7 @@ namespace ALAZEA.Controllers
             return View(model);
         }
 
-     
+
 
     }
 }
